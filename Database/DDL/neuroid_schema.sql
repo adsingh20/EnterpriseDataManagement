@@ -3,17 +3,17 @@ create schema neuroid ;
 create table neuroid.users
 (
   userID int auto_increment primary key,
-  loginID varchar(20) not null,
-  password varchar(20) not null,
-  firstName varchar(20) not null,
-  lastName varchar(20) not null,
-  email varchar(20)
+  loginID char(20) not null,
+  password char(20) not null,
+  firstName char(20) not null,
+  lastName char(20) not null,
+  email char(20)
 );
 
 create table neuroid.answers
 (
   answerid int not null auto_increment primary key,
-  answertext varchar(4000) not null,
+  answertext char(255) not null,
   typeID int,
   foreign key (typeID) references neuroid.answer_types(typeID)
 );
@@ -21,13 +21,13 @@ create table neuroid.answers
 create table neuroid.answer_types
 (
   typeID int auto_increment primary key,
-  typeName varchar(100) not null
+  typeName char(100) not null
 );
 
 create table neuroid.clients
 (
   clientID int auto_increment primary key,
-  clientName varchar(100) not null,
+  clientName char(100) not null unique,
   lastModifiedUser int not null default -9,
   lastModifiedDate date not null,
   foreign key (lastModifiedUser) references neuroid.users(userID)
@@ -36,20 +36,22 @@ create table neuroid.clients
 create table neuroid.history_types
 (
   typeID int auto_increment primary key,
-  typeName varchar(100) not null
+  typeName char(100) not null
 );
 
 create table neuroid.history_messages
 (
   messageID int auto_increment primary key,
-  messageName varchar(100) not null
+  messageName char(100) not null
 );
 
 create table neuroid.project_history
 (
   historyID int auto_increment,
   projectID int not null,
+  projectName char(255) not null,
   questionID int not null,
+  version int not null,
   historyDate date not null,
   historyType int not null,
   historyMessage int not null,
@@ -64,7 +66,9 @@ create table neuroid.industry_history
 (
   historyID int auto_increment,
   industryID int not null,
+  industryName char(255) not null,
   questionID int not null,
+  version int not null,
   historyDate date not null,
   historyType int not null,
   historyMessage int not null,
@@ -80,8 +84,8 @@ create table neuroid.industry_history
 create table neuroid.industry
 (
   industryID int auto_increment primary key,
-  industryName varchar(100) not null,
-  industryDesc varchar(1000),
+  industryName char(100) not null,
+  industryDesc char(255),
   clientID int,
   lastModifiedUser int not null default -9,
   lastModifiedDate date not null,
@@ -103,7 +107,7 @@ create table neuroid.industry_question
 create table neuroid.projects
 (
   projectID int auto_increment primary key,
-  projectName varchar(100) not null,
+  projectName char(100) not null unique,
   clientID int not null, -- Do we set this null if we delete the client?
   lastModifiedUser int not null default -9,
   lastModifiedDate date not null,
@@ -125,13 +129,25 @@ create table neuroid.project_question
 create table neuroid.question_types
 (
   questionTypeID int auto_increment primary key,
-  questionType varchar(100) not null
+  questionType char(100) not null
 );
 
-create table neuroid.questions
+create table neuroid.questions -- Needs change
 (
   questionID int auto_increment primary key,
-  questionText varchar(100) not null,
+  questionText char(100) not null,
+  lastModifiedUser int not null default -9,
+  lastModifiedDate date not null,
+  questionTypeID int not null,
+  foreign key (lastModifiedUser) references neuroid.users(userID),
+  foreign key (questionTypeID) references neuroid.question_types(questionTypeID)
+);
+
+create table neuroid.question_version -- Needs change
+(
+  versionid int,
+  questionID int,
+  questionText char(100) not null,
   lastModifiedUser int not null default -9,
   lastModifiedDate date not null,
   questionTypeID int not null,
@@ -147,13 +163,11 @@ create table neuroid.subquestions
   primary key (questionID, subquestionID)
 );
 
-
-
 create table neuroid.topic_tags
 (
   topicID int auto_increment primary key,
-  topicName varchar(100) not null,
-  topicDescription varchar(1000),
+  topicName char(100) not null unique,
+  topicDescription char(255),
   lastModifiedUser int not null default -9,
   lastModifiedDate date not null,
   foreign key (lastModifiedUser) references neuroid.users(userID)
@@ -171,13 +185,13 @@ create table neuroid.topic_questions
 create table neuroid.roles
 (
   roleID int auto_increment primary key,
-  roleName varchar(100) not null
+  roleName char(100) not null
 );
 
 create table neuroid.function
 (
   functionID int auto_increment primary key,
-  functionName varchar(100) not null
+  functionName char(100) not null
 );
 
 create table neuroid.role_function
