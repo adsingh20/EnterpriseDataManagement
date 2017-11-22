@@ -174,7 +174,7 @@ create table neuroid.project_history
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
   foreign key (historyType) references neuroid.history_types(typeID),
   foreign key (historyMessage) references neuroid.history_messages(messageID),
-  primary key(projectID,beginDate)
+  primary key(projectID,beginDate,questionID)
 );
 
 create table neuroid.industry_history
@@ -192,7 +192,7 @@ create table neuroid.industry_history
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
   foreign key (historyType) references neuroid.history_types(typeID),
   foreign key (historyMessage) references neuroid.history_messages(messageID),
-  primary key(industryID,beginDate)
+  primary key(industryID,beginDate,questionID)
 );
 
 create table neuroid.roles
