@@ -67,7 +67,7 @@ create table neuroid.topic_tags
 create table neuroid.question_types
 (
   questionTypeID int auto_increment primary key,
-  questionType char(100) not null
+  questionType char(100) not null unique
 );
 
 create table neuroid.questions -- Needs review
@@ -83,8 +83,8 @@ create table neuroid.questions -- Needs review
 create table neuroid.question_version -- Needs review
 (
   questionID int,
-  versionid int unique,
-  questionText char(100) not null,
+  versionid int,
+  questionText char(100) not null unique,
   lastModifiedUser int not null,
   lastModifiedDate date not null,
   foreign key (lastModifiedUser) references neuroid.users(userID),
@@ -118,7 +118,7 @@ create table neuroid.industry_question
   industryID int,
   questionID int,
   versionid int,
-  displayOrder int unique,
+  displayOrder int,
   dateAdded date not null,
   foreign key (industryID) references neuroid.industry(industryID),
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
@@ -130,7 +130,7 @@ create table neuroid.project_question
   projectID int,
   questionID int,
   versionid int,
-  displayOrder int unique,
+  displayOrder int,
   dateAdded date not null,
   foreign key (projectID) references neuroid.projects(projectID) on delete cascade,
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
