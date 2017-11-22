@@ -38,11 +38,9 @@ create table neuroid.industry
   industryID int auto_increment primary key,
   industryName char(100) not null,
   industryDesc char(255),
-  clientID int,
   lastModifiedUser int not null,
   lastModifiedDate date not null,
-  foreign key (lastModifiedUser) references neuroid.users(userID),
-  foreign key (clientID) references neuroid.clients(clientID)
+  foreign key (lastModifiedUser) references neuroid.users(userID)
 );
 
 create table neuroid.projects
