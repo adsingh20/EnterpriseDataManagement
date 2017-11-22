@@ -161,8 +161,9 @@ create table neuroid.history_messages
 
 create table neuroid.project_history
 (
-  historyID int auto_increment,
   projectID int not null,
+  beginDate date not null,
+  endDate date,
   projectName char(255) not null,
   questionID int not null,
   versionid int not null,
@@ -173,13 +174,14 @@ create table neuroid.project_history
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
   foreign key (historyType) references neuroid.history_types(typeID),
   foreign key (historyMessage) references neuroid.history_messages(messageID),
-  primary key(historyID,projectID,questionID)
+  primary key(projectID,beginDate)
 );
 
 create table neuroid.industry_history
 (
-  historyID int auto_increment,
   industryID int not null,
+  beginDate date not null,
+  endDate date,
   industryName char(255) not null,
   questionID int not null,
   versionid int not null,
@@ -190,7 +192,7 @@ create table neuroid.industry_history
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
   foreign key (historyType) references neuroid.history_types(typeID),
   foreign key (historyMessage) references neuroid.history_messages(messageID),
-  primary key(historyID,industryID,questionID)
+  primary key(industryID,beginDate)
 );
 
 create table neuroid.roles
