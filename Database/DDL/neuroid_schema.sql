@@ -47,10 +47,10 @@ create table neuroid.projects
 (
   projectID int auto_increment primary key,
   projectName varchar(100) not null unique,
-  clientID int not null, -- Do we set this null if we delete the client?
+  clientID int not null,
   lastModifiedUser int not null,
   lastModifiedDate date not null,
-  foreign key (clientID) references neuroid.clients(clientID), -- Do we set this null if we delete the client?
+  foreign key (clientID) references neuroid.clients(clientID),
   foreign key (lastModifiedUser) references neuroid.users(userID)
 );
 
@@ -70,7 +70,7 @@ create table neuroid.question_types
   questionType varchar(100) not null unique
 );
 
-create table neuroid.questions -- Needs review
+create table neuroid.questions
 (
   questionID int auto_increment primary key,
   lastModifiedUser int not null,
@@ -80,7 +80,7 @@ create table neuroid.questions -- Needs review
   foreign key (questionTypeID) references neuroid.question_types(questionTypeID)
 );
 
-create table neuroid.question_version -- Needs review
+create table neuroid.question_version
 (
   questionID int,
   versionid int,
