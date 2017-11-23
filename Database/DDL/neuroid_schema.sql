@@ -3,23 +3,23 @@ create schema neuroid ;
 create table neuroid.users
 (
   userID int auto_increment primary key,
-  loginID varchar not null,
-  password varchar not null,
-  firstName varchar not null,
-  lastName varchar not null,
-  email varchar
+  loginID varchar(20) not null,
+  password varchar(20) not null,
+  firstName varchar(20) not null,
+  lastName varchar(20) not null,
+  email varchar(20)
 );
 
 create table neuroid.answer_types
 (
   typeID int auto_increment primary key,
-  typeName varchar not null
+  typeName varchar(100) not null
 );
 
 create table neuroid.answers
 (
   answerid int not null auto_increment primary key,
-  answertext varchar not null,
+  answertext varchar(255) not null,
   typeID int,
   foreign key (typeID) references neuroid.answer_types(typeID)
 );
@@ -27,7 +27,7 @@ create table neuroid.answers
 create table neuroid.clients
 (
   clientID int auto_increment primary key,
-  clientName varchar not null unique,
+  clientName varchar(100) not null unique,
   lastModifiedUser int not null,
   lastModifiedDate date not null,
   foreign key (lastModifiedUser) references neuroid.users(userID)
@@ -36,8 +36,8 @@ create table neuroid.clients
 create table neuroid.industry
 (
   industryID int auto_increment primary key,
-  industryName varchar not null,
-  industryDesc varchar,
+  industryName varchar(100) not null,
+  industryDesc varchar(255),
   lastModifiedUser int not null,
   lastModifiedDate date not null,
   foreign key (lastModifiedUser) references neuroid.users(userID)
@@ -46,19 +46,19 @@ create table neuroid.industry
 create table neuroid.projects
 (
   projectID int auto_increment primary key,
-  projectName varchar not null unique,
-  clientID int not null, 
+  projectName varchar(100) not null unique,
+  clientID int not null, -- Do we set this null if we delete the client?
   lastModifiedUser int not null,
   lastModifiedDate date not null,
-  foreign key (clientID) references neuroid.clients(clientID), 
+  foreign key (clientID) references neuroid.clients(clientID), -- Do we set this null if we delete the client?
   foreign key (lastModifiedUser) references neuroid.users(userID)
 );
 
 create table neuroid.topic_tags
 (
   topicID int auto_increment primary key,
-  topicName varchar not null unique,
-  topicDescription varchar,
+  topicName varchar(100) not null unique,
+  topicDescription varchar(255),
   lastModifiedUser int not null,
   lastModifiedDate date not null,
   foreign key (lastModifiedUser) references neuroid.users(userID)
@@ -67,7 +67,7 @@ create table neuroid.topic_tags
 create table neuroid.question_types
 (
   questionTypeID int auto_increment primary key,
-  questionType varchar not null unique
+  questionType varchar(100) not null unique
 );
 
 create table neuroid.questions -- Needs review
@@ -84,7 +84,7 @@ create table neuroid.question_version -- Needs review
 (
   questionID int,
   versionid int,
-  questionText varchar not null unique,
+  questionText varchar(100) not null unique,
   lastModifiedUser int not null,
   lastModifiedDate date not null,
   foreign key (lastModifiedUser) references neuroid.users(userID),
@@ -150,13 +150,13 @@ create table neuroid.topic_question
 create table neuroid.history_types
 (
   typeID int auto_increment primary key,
-  typeName varchar not null
+  typeName varchar(100) not null
 );
 
 create table neuroid.history_messages
 (
   messageID int auto_increment primary key,
-  messageName varchar not null
+  messageName varchar(100) not null
 );
 
 create table neuroid.project_history
@@ -164,7 +164,7 @@ create table neuroid.project_history
   projectID int not null,
   beginDate date not null,
   endDate date,
-  projectName varchar not null,
+  projectName varchar(255) not null,
   questionID int not null,
   versionid int not null,
   historyDate date not null,
@@ -182,7 +182,7 @@ create table neuroid.industry_history
   industryID int not null,
   beginDate date not null,
   endDate date,
-  industryName varchar not null,
+  industryName varchar(255) not null,
   questionID int not null,
   versionid int not null,
   historyDate date not null,
@@ -198,13 +198,13 @@ create table neuroid.industry_history
 create table neuroid.roles
 (
   roleID int auto_increment primary key,
-  roleName varchar not null
+  roleName varchar(100) not null
 );
 
 create table neuroid.function
 (
   functionID int auto_increment primary key,
-  functionName varchar not null
+  functionName varchar(100) not null
 );
 
 create table neuroid.role_function
