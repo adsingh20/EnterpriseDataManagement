@@ -211,6 +211,7 @@ create table neuroid.role_function
 (
   roleID int,
   functionID int,
+  updateind int,
   foreign key (roleID) references neuroid.roles(roleID) on delete cascade,
   foreign key (functionID) references neuroid.function(functionID),
   primary key (roleID, functionID)
