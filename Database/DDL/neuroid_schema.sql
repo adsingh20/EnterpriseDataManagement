@@ -7,16 +7,18 @@ create table neuroid.users
   password varchar(20) not null,
   firstName varchar(20) not null,
   lastName varchar(20) not null,
-  email varchar(20)
+  email varchar(20),
+  roleid int,
+  foreign key (roleID) references neuroid.roles(roleID) on delete set null
 );
 
-create table neuroid.answer_types
+create table neuroid.answer_types -- Unused table
 (
   typeID int auto_increment primary key,
   typeName varchar(100) not null
 );
 
-create table neuroid.answers
+create table neuroid.answers -- Unused table
 (
   answerid int not null auto_increment primary key,
   answertext varchar(255) not null,
@@ -29,7 +31,7 @@ create table neuroid.clients
   clientID int auto_increment primary key,
   clientName varchar(100) not null unique,
   lastModifiedUser int not null,
-  lastModifiedDate date not null,
+  lastModifiedDate datetime not null,
   foreign key (lastModifiedUser) references neuroid.users(userID)
 );
 
@@ -39,7 +41,7 @@ create table neuroid.industry
   industryName varchar(100) not null,
   industryDesc varchar(255),
   lastModifiedUser int not null,
-  lastModifiedDate date not null,
+  lastModifiedDate datetime not null,
   foreign key (lastModifiedUser) references neuroid.users(userID)
 );
 
@@ -49,7 +51,7 @@ create table neuroid.projects
   projectName varchar(100) not null unique,
   clientID int not null,
   lastModifiedUser int not null,
-  lastModifiedDate date not null,
+  lastModifiedDate datetime not null,
   foreign key (clientID) references neuroid.clients(clientID),
   foreign key (lastModifiedUser) references neuroid.users(userID)
 );
@@ -60,7 +62,7 @@ create table neuroid.topic_tags
   topicName varchar(100) not null unique,
   topicDescription varchar(255),
   lastModifiedUser int not null,
-  lastModifiedDate date not null,
+  lastModifiedDate datetime not null,
   foreign key (lastModifiedUser) references neuroid.users(userID)
 );
 
@@ -74,7 +76,7 @@ create table neuroid.questions
 (
   questionID int auto_increment primary key,
   lastModifiedUser int not null,
-  lastModifiedDate date not null,
+  lastModifiedDate datetime not null,
   questionTypeID int not null,
   foreign key (lastModifiedUser) references neuroid.users(userID),
   foreign key (questionTypeID) references neuroid.question_types(questionTypeID)
@@ -86,7 +88,7 @@ create table neuroid.question_version
   versionid int,
   questionText varchar(100) not null unique,
   lastModifiedUser int not null,
-  lastModifiedDate date not null,
+  lastModifiedDate datetime not null,
   foreign key (lastModifiedUser) references neuroid.users(userID),
   foreign key (questionID) references neuroid.questions(questionID),
   primary key (questionID, versionid)
@@ -103,7 +105,7 @@ create table neuroid.subquestions
   primary key (questionID, versionid, subquestionID, subversionid)
 );
 
-create table neuroid.question_answers
+create table neuroid.question_answers -- Unused table
 (
   questionID int,
   versionid int,
@@ -118,11 +120,10 @@ create table neuroid.industry_question
   industryID int,
   questionID int,
   versionid int,
-  displayOrder int,
-  dateAdded date not null,
+  dateadded date not null,
   foreign key (industryID) references neuroid.industry(industryID),
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
-  primary key(industryID,questionID,displayOrder)
+  primary key(industryID,questionID,versionid)
 );
 
 create table neuroid.project_question
@@ -130,11 +131,10 @@ create table neuroid.project_question
   projectID int,
   questionID int,
   versionid int,
-  displayOrder int,
-  dateAdded date not null,
+  dateadded date not null,
   foreign key (projectID) references neuroid.projects(projectID) on delete cascade,
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
-  primary key (projectID, questionID, displayOrder)
+  primary key (projectID, questionID, versionid)
 );
 
 create table neuroid.topic_question
@@ -144,16 +144,16 @@ create table neuroid.topic_question
   versionid int,
   foreign key (topicID) references neuroid.topic_tags(topicID),
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid) on delete cascade,
-  primary key( topicID, questionID)
+  primary key( topicID, questionID,versionid)
 );
 
-create table neuroid.history_types
+create table neuroid.history_types -- Unused table
 (
   typeID int auto_increment primary key,
   typeName varchar(100) not null
 );
 
-create table neuroid.history_messages
+create table neuroid.history_messages -- Unused table
 (
   messageID int auto_increment primary key,
   messageName varchar(100) not null
@@ -164,16 +164,15 @@ create table neuroid.project_history
   projectID int not null,
   beginDate date not null,
   endDate date,
-  projectName varchar(255) not null,
   questionID int not null,
   versionid int not null,
-  historyDate date not null,
-  historyType int not null,
-  historyMessage int not null,
+  dateadded date not null, -- This represents the date when the question was added to the project record.
+  -- historyType int not null,
+  -- historyMessage int not null,
   foreign key (projectID) references neuroid.projects(projectID) on delete cascade,
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
-  foreign key (historyType) references neuroid.history_types(typeID),
-  foreign key (historyMessage) references neuroid.history_messages(messageID),
+  -- foreign key (historyType) references neuroid.history_types(typeID),
+  -- foreign key (historyMessage) references neuroid.history_messages(messageID),
   primary key(projectID,beginDate,questionID)
 );
 
@@ -182,16 +181,15 @@ create table neuroid.industry_history
   industryID int not null,
   beginDate date not null,
   endDate date,
-  industryName varchar(255) not null,
   questionID int not null,
   versionid int not null,
-  historyDate date not null,
-  historyType int not null,
-  historyMessage int not null,
+  dateadded date not null, -- This represents the date when the question was added to the industry record.
+  -- historyType int not null,
+  -- historyMessage int not null,
   foreign key (industryID) references neuroid.industry(industryID) on delete cascade,
   foreign key (questionID,versionid) references neuroid.question_version(questionID,versionid),
-  foreign key (historyType) references neuroid.history_types(typeID),
-  foreign key (historyMessage) references neuroid.history_messages(messageID),
+  -- foreign key (historyType) references neuroid.history_types(typeID),
+  -- foreign key (historyMessage) references neuroid.history_messages(messageID),
   primary key(industryID,beginDate,questionID)
 );
 
@@ -215,13 +213,4 @@ create table neuroid.role_function
   foreign key (roleID) references neuroid.roles(roleID) on delete cascade,
   foreign key (functionID) references neuroid.function(functionID),
   primary key (roleID, functionID)
-);
-
-create table neuroid.user_role
-(
-  userID int,
-  roleID int,
-  foreign key (roleID) references neuroid.roles(roleID),
-  foreign key (userID) references neuroid.users(userID) on delete cascade,
-  primary key (userID,roleID)
 );
