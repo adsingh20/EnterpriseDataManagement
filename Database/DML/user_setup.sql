@@ -1,44 +1,45 @@
 -- Function setup
-insert into neuroid.function (functionname) values ('Projects'); -- ID = 1
-insert into neuroid.function (functionname) values ('Clients'); -- ID = 2
-insert into neuroid.function (functionname) values ('Industry'); -- ID = 3
-insert into neuroid.function (functionname) values ('Topic Tags'); -- ID = 4
-insert into neuroid.function (functionname) values ('Questions'); -- ID = 5
+insert into neuroid.function (functionname) values
+  ('Projects'), -- ID = 1
+ ('Clients'), -- ID = 2
+ ('Industry'), -- ID = 3
+ ('Topic Tags'), -- ID = 4
+ ('Questions'); -- ID = 5
 
-insert into neuroid.roles (rolename) values ('Admin Role'); -- ID = 1
-insert into neuroid.roles (rolename) values ('Technical Role'); -- ID = 2
-insert into neuroid.roles (rolename) values ('Sales Role'); -- ID = 3
-insert into neuroid.roles (rolename) values ('Analyst Role'); -- ID = 4
+insert into neuroid.roles (rolename) values
+  ('Admin Role'), -- ID = 1
+ ('Technical Role'), -- ID = 2
+ ('Sales Role'), -- ID = 3
+ ('Analyst Role'); -- ID = 4
 
-insert into neuroid.users (loginid,password,firstname,lastname, roleid) values ('admin', 'admin', 'Admin', 'Role',1);  -- ID = 1
-insert into neuroid.users (loginid,password,firstname,lastname, roleid) values ('technical', 'technical', 'Technical', 'Role',2); -- ID = 2
-insert into neuroid.users (loginid,password,firstname,lastname, roleid) values ('sales', 'sales', 'Sales', 'Role',3); -- ID = 3
-insert into neuroid.users (loginid,password,firstname,lastname, roleid) values ('analyst', 'analyst', 'Analyst', 'Role',4); -- ID = 4
+insert into neuroid.users (loginid,password,firstname,lastname, roleid) values
+  ('admin', 'admin', 'Admin', 'Role',1),  -- ID = 1
+ ('technical', 'technical', 'Technical', 'Role',2), -- ID = 2
+ ('sales', 'sales', 'Sales', 'Role',3), -- ID = 3
+ ('analyst', 'analyst', 'Analyst', 'Role',4); -- ID = 4
 
 -- Admin role gets full access
-insert into role_function values (1,1,1);
-insert into role_function values (1,2,1);
-insert into role_function values (1,3,1);
-insert into role_function values (1,4,1);
-insert into role_function values (1,5,1);
-
+insert into neuroid.role_function values
+  (1,1,1),
+ (1,2,1),
+ (1,3,1),
+ (1,4,1),
+ (1,5,1),
 -- Sales Role gets read only access
-insert into role_function values (3,1,0);
-insert into role_function values (3,2,0);
-insert into role_function values (3,3,0);
-insert into role_function values (3,4,0);
-insert into role_function values (3,5,0);
+ (3,1,0),
+ (3,2,0),
+ (3,3,0),
+ (3,4,0),
+ (3,5,0),
+-- Analyst Role gets full access to Questions and Topic Tags screens
+ (4,5,1),
+ (4,4,1);
 
---Analyst Role gets full access to Questions and Topic Tags screens
-insert into role_function values (4,5,1);
-insert into role_function values (4,4,1);
-
-commit;
 
 /*
 Function to be used:
 
-? = neuroid.get_privileges(?,?);
+? = neuroid.get_privileges(?,?),
 
 Order of parameters:
 1. Output parameter, expect the following values:

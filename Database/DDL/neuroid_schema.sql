@@ -1,5 +1,11 @@
 create schema neuroid ;
 
+create table neuroid.roles
+(
+  roleID int auto_increment primary key,
+  roleName varchar(100) not null
+);
+
 create table neuroid.users
 (
   userID int auto_increment primary key,
@@ -191,12 +197,6 @@ create table neuroid.industry_history
   -- foreign key (historyType) references neuroid.history_types(typeID),
   -- foreign key (historyMessage) references neuroid.history_messages(messageID),
   primary key(industryID,beginDate,questionID)
-);
-
-create table neuroid.roles
-(
-  roleID int auto_increment primary key,
-  roleName varchar(100) not null
 );
 
 create table neuroid.function
