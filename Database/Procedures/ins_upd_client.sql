@@ -1,6 +1,6 @@
 drop procedure if exists neuroid.ins_upd_client;
 delimiter //
-create procedure ins_upd_client
+create procedure neuroid.ins_upd_client
 (
   in cid int,
   in cname varchar(100),
